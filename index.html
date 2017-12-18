@@ -52,60 +52,19 @@
 		paperScopes.scope1.activate();
 
 		drawLabel('Primal Plane', 188);
-		// var label = new PointText(new Point(10, 30));
-		// label.content = 'Primal Plane';
-		// label.fontSize = 25;
-		// var bound = new Rectangle( new Point(8, 8), new Size(188, 30));
-		// var rect = new Path.Rectangle(bound, new Size(5, 5));
-		// rect.radius = 10;
-		// rect.fillColor = 'white';
-		// rect.insertBelow(label);
-		// label.fontFamily = 'Courier New'
-		// label.backgroundColor = 'white';
 
 		var i = 0;
 		var v = paperScopes.scope1.project.view;
 		var c1 = new Point(v.bounds.width/2, v.bounds.height/2);
 		var from = new Point(v.bounds.width, 0);
 		var to = new Point(v.bounds.width, v.bounds.height);
-		// var boundary = new Path.Line(from, to);
-		// var test = new Path.Line(from, center);
-		// test.strokeColor = 'green';
-		// test.strokeWidth = 7;
-		// boundary.strokeColor = 'red';
-		// boundary.strokeWidth = 5;
-		// Give the stroke a color
-		// var start = new Point(c1.x, 0);
 
-		// var yAxis = new Path();
-		// yAxis.add(start);
-		// yAxis.add(new Point(c1.x, v.bounds.height));
-		// yAxis.strokeColor = 'blue';
-		// yAxis.dashArray = [10, 4];
-
-		// var start = new Point(v.bounds.x, c1.y);
-		// var xAxis = new Path();
-		// xAxis.add(start);
-		// xAxis.add(new Point(v.bounds.width, c1.y));
-		// xAxis.strokeColor = 'blue';
-		// xAxis.dashArray = [10, 4];
 		var yAxis = drawAxes(c1.x, c1.y, v.bounds.height, v.bounds.width);
-		// view.draw();
 		var tool1 = new Tool();
 		
-		// dualProject.activate();
-		// this.paper.setup('dualPlane');
-
 		paperScopes.scope2.activate();
 
-		// var label = new PointText(new Point(10, 30));
-		// label.justification = 'center';
 		drawLabel('Dual Plane', 170);
-		// label.fillColor = 'black';
-		// label.content = 'Dual Plane';
-		// label.fontSize = 25;
-		// // label.fontWeight = 'bold';
-		// label.fontFamily = 'Courier New'
 
 		var v2 = paperScopes.scope2.project.view;
 		var c2 = new Point(v2.bounds.width/2, v2.bounds.height/2);
@@ -128,7 +87,6 @@
 			var intercept = new Point(c2.x, b);
 			console.log(b);
 			
-			
 			var px = intercept.x + 1000;
 			var py =  intercept.y - 1000*slope;
 			var dual = new Path.Line(intercept, new Point(px, py));
@@ -136,16 +94,7 @@
 			var px = intercept.x - 1000;
 			var py =  intercept.y + 1000*slope;
 			dual.add(new Point(px, py));
-
-			// var labelPt = new Point(new Point(intercept.x + 20*slope + 10, intercept.y - 20*slope*slope));
-			// var label = new PointText(labelPt);
-			// var arrow = new Path(labelPt);
-			// arrow.add(new Point(intercept.x + 20*slope, intercept.y - 20*slope*slope));
-			// arrow.strokeColor = 'black';
-			// label.justification = 'center';
-			// label.fillColor = 'black';
-			// label.content = 'p*' + i;
-			// i = i + 1;
+			
 			dual.sendToBack();
 			dual.strokeColor = color;
 			dual.strokeWidth = 3;
@@ -153,9 +102,7 @@
 
 		drawDualPoint = function(x, y, cx, cy, color) {
 			var dual = new Path.Circle(new Point(x + cx, -1*(y.y - cy) + cy), 5);
-			console.log(x, -1*(y.y - c2.y) + c2.y);
 			dual.fillColor = color;
-			console.log(dual);
 		}
 
 		function drawAxes(cx, cy, h, w) {
@@ -179,34 +126,18 @@
 
 		var tool2 = new Tool();
 
-
 		tool1.onMouseDown = function(event) {
-			if (event.modifiers.shift) {
-				// console.log('drag!');
-			}
-			else {
+			if (!event.modifiers.shift) {
 				var circ = new Path.Circle(event.point, 5);
 				circ.fillColor = 'orange';
-
-				// var label = new PointText(new Point(event.point.x + 10, event.point.y + 10));
-				// label.justification = 'center';
-				// label.fillColor = 'black';
-				// label.content = 'p' + i;
-				// label.fontFamily = 'Courier New'
-				// i = i + 1;
-
 				var a = (event.point.x - c1.x)/100;
 				var b = -1*(event.point.y-c1.y) + c1.y;
-				// console.log(a, b);
 				paperScopes.scope2.activate();
 				drawDualLine(a, b, 'red');
 			}
-			console.log(event.type);
 		}
 
 		var line = new Path();
-		
-
 		tool1.onMouseDrag = function(event) {
 			if (event.modifiers.shift){
 				line.remove();
@@ -225,8 +156,6 @@
 				var final = new Path(event.lastPoint);
 				final.add(event.point);
 
-				// console.log(yAxis);
-
 				var dx = (event.lastPoint.x - event.point.x);
 				var dy = (event.lastPoint.y - event.point.y);
 				console.log(dx, dy);
@@ -238,7 +167,6 @@
 				final.strokeColor = 'blue';
 				final.strokeWidth = 3;
 				var yIntercept = new Path.Circle(final.getIntersections(yAxis)[0].point, 3);
-				// yIntercept.fillColor = 'black';
 
 				paperScopes.scope2.activate();
 				drawDualPoint(100*slope, yIntercept.position, c2.x, c2.y, 'green');
@@ -254,7 +182,6 @@
 				circ.fillColor = 'green';
 				var a = (event.point.x - c2.x)/100;
 				var b = -1*(event.point.y-c2.y) + c2.y;
-				// console.log(a, b);
 				paperScopes.scope1.activate();
 				drawDualLine(a, b, 'blue');
 			}
@@ -278,8 +205,6 @@
 				var final = new Path(event.lastPoint);
 				final.add(event.point);
 
-				// console.log(yAxis);
-
 				var dx = (event.lastPoint.x - event.point.x);
 				var dy = (event.lastPoint.y - event.point.y);
 				console.log(dx, dy);
@@ -291,7 +216,6 @@
 				final.strokeColor = 'red';
 				final.strokeWidth = 3;
 				var yIntercept = new Path.Circle(final.getIntersections(yAxis)[0].point, 3);
-				// yIntercept.fillColor = 'black';
 
 				paperScopes.scope1.activate();
 				drawDualPoint(100*slope, yIntercept.position, c1.x, c1.y, 'orange');
@@ -300,46 +224,7 @@
 				line.remove();
 			}
 		}
-
-		
-
-		// redrawBoundary = function() {
-			// boundary.remove();
-			// paperScopes.scope1.project.activate();
-			// v = paperScopes.scope1.project.view;
-			// from = new Point(v.bounds.width, 0);
-			// to = new Point(v.bounds.width, v.bounds.height);
-			// boundary = new Path.Line(from, to);
-			// boundary.remove();
-
-		// }
-		// paperScopes.scope1.project.view.onResize = function(event) {
-		// 	redrawBoundary();
-		// 	from = new Point(v.bounds.width, 0);
-		// 	to = new Point(v.bounds.width, v.bounds.height);
-		// 	boundary = new Path.Line(from, to);
-		// 	boundary.strokeColor = 'red';
-		// 	boundary.strokeWidth = 5;
-		// }
 	}
-
-	// var path = new Path();
-	// var point = new Point(100, 100);
-	// point.strokeColor = 'black';
-	// // Give the stroke a color
-	// path.strokeColor = 'black';
-	// var start = new Point(0, 0);
-	// // Move to start and draw a line from there
-	// // <!-- path.moveTo(start); -->
-	// path.add(start);
-	// path.add(new Point(100, 100));
-	// function onMouseDown(event) {
-	// 	var circ = new Path.Circle(event.point, 2);
-	// 	circ.fillColor = 'black';
-	// }
-	// Note the plus operator on Point objects.
-	// PaperScript does that for us, and much more!
-	// <!-- path.lineTo(start + [ 300, 0 ]); -->
 </script>
 </head>
 <body>
